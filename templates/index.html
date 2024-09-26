@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+    <title> GST and Cess Calculator </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .left, .right {
+            width: 48%;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        .result {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .left, .right {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        // Function to dynamically update services based on the selected category
+        function updateServices(category) {
+            fetch(`/get_services/${category}`)
+            .then(response => response.json())
+            .then(data => {
+                const serviceSelect = document.getElementById('service');
+                serviceSelect.innerHTML = '';
+                data.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service;
+                    option.textContent = service.charAt(0).toUpperCase() + service.slice(1);
+                    serviceSelect.appendChild(option);
+                });
+            });
+        }
+
+        // Load the GST data ----> table
+        function loadTableData() {
+            fetch('/get_gst_data')
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById('gstTableBody');
+                table.innerHTML = '';  // Clear existing data
+
+                data.forEach((row, index) => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td><input type="text" value="${row['Service Category']}"></td>
+                        <td><input type="text" value="${row['Service Name']}"></td>
+                        <td><input type="number" step="0.01" value="${row['GST Rate']}"></td>
+                        <td><input type="number" step="0.01" value="${row['Cess Rate']}"></td>
+                    `;
+                    table.appendChild(newRow);
+                });
+            });
+        }
+
+        // Function to save the updated table data
+        function saveTableData() {
+            const table = document.getElementById('gstTableBody');
+            const rows = table.querySelectorAll('tr');
+            const updatedData = [];
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('input');
+                const rowData = {
+                    'Service Category': cells[0].value,
+                    'Service Name': cells[1].value,
+                    'GST Rate': cells[2].value,
+                    'Cess Rate': cells[3].value
+                };
+                updatedData.push(rowData);
+            });
+
+            fetch('/save_gst_data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Data saved successfully!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        }
+
+        // Add a new row to the table
+        function addNewRow() {
+            const table = document.getElementById('gstTableBody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="New Category"></td>
+                <td><input type="text" placeholder="New Service"></td>
+                <td><input type="number" step="0.01" placeholder="GST Rate"></td>
+                <td><input type="number" step="0.01" placeholder="Cess Rate"></td>
+            `;
+            table.appendChild(newRow);
+        }
+
+        window.onload = function() {
+            loadTableData();  // Load the table data when the page is loaded
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Side: GST Calculator -->
+        <div class="left">
+            <h1>GST and Cess Calculator</h1>
+
+            <form method="POST">
+                <label for="category">Service Category:</label>
+                <select id="category" name="category" onchange="updateServices(this.value)">
+                    <option value="">Select a category</option>
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category|capitalize }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="service">Service:</label>
+                <select id="service" name="service">
+                    <option value="">Select a service</option>
+                </select>
+
+                <label for="original_price">Original Price:</label>
+                <input type="text" id="original_price" name="original_price" placeholder="Enter the original price" required>
+
+                <button type="submit">Calculate</button>
+            </form>
+
+            {% if gst_amount is not none %}
+            <div class="result">
+                <p>Item: <strong>{{ service_name }}</strong></p> <!-- Display the item name -->
+                <p>GST Amount (CGST+IGST): ₹{{ 2*gst_amount }}</p> <!-- Show GST amount with CSGST and IGSt -->
+                <p>Cess Amount: ₹{{ cess_amount }}</p>
+                <p>Final Price: ₹{{ final_price }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Side: GST Table Editing -->
+        <div class="right">
+            <h2>Edit GST Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service Category</th>
+                        <th>Service Name</th>
+                        <th>GST Rate (%)</th>
+                        <th>Cess Rate (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="gstTableBody"></tbody>
+            </table>
+
+            <button onclick="addNewRow()">Add New Row</button>
+            <button onclick="saveTableData()">Save Changes</button>
+        </div>
+    </div>
+</body>
+</html>

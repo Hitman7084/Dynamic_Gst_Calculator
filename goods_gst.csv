@@ -1,0 +1,77 @@
+Service Category,Service Name,GST Rate,Cess Rate
+Food,Milk,0,nan
+Food,butter,12,nan
+Food,Curd,0,nan
+Food,Lassi,0,nan
+Food,Eggs,0,nan
+Food,Fresh Vegetables,0,nan
+Unbranded, atta,0,nan
+Unbranded, maida,0,nan
+Unbranded, Paneer,0,nan
+Unbranded, Gur,0,nan
+Unbranded, Besan,0,nan
+Unbranded, Natural Honey,0,nan
+Unbranded, Coconut Water,12,nan
+Educational Services, high school fee,18,nan
+Educational Services, intermediate fee,18,nan
+Educational Services, kindergarden fee,0,nan
+Health Services, essential medicines,5,nan
+Health Services, Life saving drugs,5,nan
+Health Services, homeopathic medicine,12,nan
+Health Services, allopathic medicines,12,nan
+Health Services, Aryurvedic medicine,12,nan
+Health Services, veterinary medicine,12,nan
+Salt, Normal Salt,0,nan
+Salt, Black salt,5,nan
+Salt, RocK salt,5,nan
+Cleaning tools, Phool Bhari Jhadoo,0,nan
+Cleaning tools, Mop,18,nan
+Cleaning tools, Sponges,18,nan
+Cleaning tools, Vacuum cleaner,18,nan
+Processed dry fruit, Raisin,5,nan
+Processed dry fruit, Almonds,5,nan
+Raw dry fruit, Raisin,0,nan
+Raw dry fruit, Almonds,0,nan
+Electronics, Computers,12,nan
+Electronics, Diodes,18,nan
+Electronics, Transistors,18,nan
+Electrical, Wires and Cable,18,nan
+Electrical, Plugs,18,nan
+Electrical, Switches,18,nan
+Natural Fabric, knitted/woven Cotton,5,nan
+Natural Fabric, knitted/woven Silk,5,nan
+Natural Fabric, knitted/woven Wool,5,nan
+Man-Made Fabric, knitteed/woven Nylon,5,nan
+Man-Made Fabric, knitted/woven Polyester,5,nan
+Proceessed Fabric, dyed/printed Cotton,18,nan
+Proceessed Fabric, dyed/printed Nylon,18,nan
+Proceessed Fabric, dyed/printed Polyester,18,nan
+Proceessed Fabric, dyed/printed Silk,18,nan
+Proceessed Fabric, dyed/printed Wool,18,nan
+Drinks, Coffee,5,nan
+Drinks, Tea,5,nan
+Drinks, Fruit Juice,12,nan
+Drinks, Carbonated Beverages,28,nan
+Insurance services, LIC,18,nan
+Insurance Services, General insurance ,18,nan
+Financial services, Mutual Fund services,18,nan
+Financial services, Brokerage charges ,18,nan
+Financial services, Foreign currency conversion services,18,nan
+Financial services, Leasing and hire purchase services,18,nan
+Cosmetics, Kajal,18,nan
+Cosmetics, Foundation,18,nan
+Cosmetics, Lipstick,18,nan
+Cosmetics, creams,18,nan
+Cosmetics, lotions,18,nan
+Cosmetics, Perfumes/Deodorants,18,nan
+Cosmetics, shampoos,18,nan
+Cosmetics, conditioners,18,nan
+Cosmetics, Nail polish,18,nan
+Cosmetics, toothpaste,18,nan
+Cosmetics, mouthwash,18, 
+Cosmetics, Sunscreen,18,nan
+Cosmetics, soaps,18,nan
+Cosmetics, body wash,18,nan
+Vehicle,Electric cars,5,nan
+Vehicle,Hybrid cars,28,15
+
