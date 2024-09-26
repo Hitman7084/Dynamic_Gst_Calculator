@@ -123,22 +123,20 @@ def generate_invoice():
         customer_name = request.form['customer_name']
         authorised_signatory = request.form['authorised_signatory']
 
-        # Get services from the form (assuming they are passed as a list)
-        selected_services = request.form.getlist('services')  # Get multiple services
-        original_prices = request.form.getlist('original_prices')  # Get corresponding prices
-
+        # Get services and prices from the form
+        selected_services = request.form.getlist('services')
+        original_prices = request.form.getlist('original_prices')
+        
         # Convert prices to float
         original_prices = [float(price) for price in original_prices]
 
         # Create an in-memory PDF file
         buffer = BytesIO()
-
-        # Increase the page size to A4 (595.27, 841.89)
         c = canvas.Canvas(buffer, pagesize=(595.27, 841.89), bottomup=0)
 
         # Company Information
         c.setFont("Times-Bold", 14)
-        c.drawCentredString(300, 40, company_name)  # Centered based on the new width
+        c.drawCentredString(300, 40, company_name)
         c.setFont("Times-Roman", 12)
         c.drawCentredString(300, 60, f"{address}, {city}")
         c.drawCentredString(300, 80, f"GST No: {gst}")
@@ -162,7 +160,7 @@ def generate_invoice():
         total_price = 0
         for service, original_price in zip(selected_services, original_prices):
             service_name = service.capitalize()
-            
+
             # Fetch GST and Cess details from gst_data based on the service name
             if service in gst_data:
                 gst_rate = gst_data[service]['Tax (%)']
@@ -207,6 +205,7 @@ def generate_invoice():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
 
 
 
