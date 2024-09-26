@@ -121,7 +121,6 @@ def generate_invoice():
         date = request.form['date']
         contact = request.form['contact']
         customer_name = request.form['customer_name']
-        authorised_signatory = request.form['authorised_signatory']
 
         # Get services from the form (assuming they are passed as a list)
         selected_services = request.form.getlist('services')  # Get multiple services
@@ -134,7 +133,7 @@ def generate_invoice():
         buffer = BytesIO()
 
         # Increase the page size to A4 (595.27, 841.89)
-        c = canvas.Canvas(buffer, pagesize=(595.27, 841.89), bottomup=0)
+        c = canvas.Canvas(buffer, pagesize=(595, 842), bottomup=0)
 
         # Company Information
         c.setFont("Times-Bold", 14)
@@ -194,7 +193,6 @@ def generate_invoice():
 
         # Add authorised signatory at the bottom
         c.setFont("Times-Roman", 10)
-        c.drawRightString(550, 800, authorised_signatory)
         c.drawRightString(550, 820, "Signature")
 
         # Save the PDF
