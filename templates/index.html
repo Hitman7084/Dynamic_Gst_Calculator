@@ -190,33 +190,36 @@
         }
 
         function generateInvoice() {
-            const items = [
-                {
-                    serviceName: document.getElementById('service').value,
-                    originalPrice: document.getElementById('original_price').value,
-                    gstRate: 18, 
-                    cessRate: 0   
-                }
-            ];
+            const formData = new FormData();
+            formData.append('company_name', document.getElementById('company_name').value);
+            formData.append('address', document.getElementById('address').value);
+            formData.append('city', document.getElementById('city').value);
+            formData.append('gst', document.getElementById('gst').value);
+            formData.append('date', document.getElementById('date').value);
+            formData.append('contact', document.getElementById('contact').value);
+            formData.append('customer_name', document.getElementById('customer_name').value);
+    
+    // Append services and prices
+            formData.append('services', document.getElementById('service').value);
+            formData.append('original_prices', document.getElementById('original_price').value);
 
             fetch('/generate_invoice', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', 
-                },
-                body: JSON.stringify({ items: items }) // shi hai Json stringified JSON
+                body: formData // Send form data
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Invoice generated successfully!');
-                    
-                } else {
-                    alert('Error: ' + data.message);
-                }
+            .then(response => response.blob()) // Handle response as a file (PDF)
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Invoice.pdf'; // Set the filename for the download
+                document.body.appendChild(a); // Append the anchor to the document
+                a.click(); // Trigger download
+                a.remove(); // Remove the anchor
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Error generating the invoice.');
             });
         }
 
