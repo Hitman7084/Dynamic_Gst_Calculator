@@ -123,81 +123,78 @@ def generate_invoice():
         customer_name = request.form['customer_name']
         authorised_signatory = request.form['authorised_signatory']
 
-        # Simulate a list of items to include in the invoice (you can replace this with actual data from your form)
-        items = [
-            {
-                'service_name': 'Service 1',
-                'original_price': 1000.0,
-                'gst_rate': 18,   # 18% GST
-                'cess_rate': 0    # 0% Cess
-            },
-            {
-                'service_name': 'Service 2',
-                'original_price': 500.0,
-                'gst_rate': 12,   # 12% GST
-                'cess_rate': 5    # 5% Cess
-            }
-        ]
+        # Get services from the form (assuming they are passed as a list)
+        selected_services = request.form.getlist('services')  # Get multiple services
+        original_prices = request.form.getlist('original_prices')  # Get corresponding prices
+
+        # Convert prices to float
+        original_prices = [float(price) for price in original_prices]
 
         # Create an in-memory PDF file
         buffer = BytesIO()
-        c = canvas.Canvas(buffer, pagesize=(200, 300), bottomup=0)
+
+        # Increase the page size to A4 (595.27, 841.89)
+        c = canvas.Canvas(buffer, pagesize=(595.27, 841.89), bottomup=0)
 
         # Company Information
-        c.setFont("Times-Bold", 10)
-        c.drawCentredString(100, 20, company_name)
-        c.setFont("Times-Roman", 8)
-        c.drawCentredString(100, 35, f"{address}, {city}")
-        c.drawCentredString(100, 50, f"GST No: {gst}")
-        c.drawCentredString(100, 60, f"Date: {date}")
-        c.drawCentredString(100, 70, f"Customer: {customer_name}")
-        c.drawCentredString(100, 80, f"Contact: {contact}")
+        c.setFont("Times-Bold", 14)
+        c.drawCentredString(300, 40, company_name)  # Centered based on the new width
+        c.setFont("Times-Roman", 12)
+        c.drawCentredString(300, 60, f"{address}, {city}")
+        c.drawCentredString(300, 80, f"GST No: {gst}")
+        c.drawCentredString(300, 100, f"Date: {date}")
+        c.drawCentredString(300, 120, f"Customer: {customer_name}")
+        c.drawCentredString(300, 140, f"Contact: {contact}")
 
         # Invoice Table Header
-        c.setFont("Times-Bold", 8)
-        c.drawString(10, 100, "Service")
-        c.drawString(70, 100, "Original Price")
-        c.drawString(130, 100, "GST")
-        c.drawString(160, 100, "Cess")
-        c.drawString(180, 100, "Total")
+        c.setFont("Times-Bold", 10)
+        c.drawString(40, 160, "Service")
+        c.drawString(180, 160, "Original Price")
+        c.drawString(300, 160, "GST")
+        c.drawString(380, 160, "Cess")
+        c.drawString(450, 160, "Total")
 
         # Draw horizontal line under headers
-        c.line(5, 105, 195, 105)
+        c.line(40, 165, 550, 165)
 
-        # Loop through the items and print each row in the PDF
-        y = 120
+        # Loop through the selected services and generate rows
+        y = 180
         total_price = 0
-        for item in items:
-            service_name = item['service_name']
-            original_price = item['original_price']
-            gst_rate = item['gst_rate']
-            cess_rate = item['cess_rate']
+        for service, original_price in zip(selected_services, original_prices):
+            service_name = service.capitalize()
+            
+            # Fetch GST and Cess details from gst_data based on the service name
+            if service in gst_data:
+                gst_rate = gst_data[service]['Tax (%)']
+                cess_rate = gst_data[service].get('Cess (%)', 0)
+            else:
+                gst_rate = cess_rate = 0  # Default if not found in gst_data
 
-            # Calculate GST, Cess, and Total price for each item
+            # Calculate GST, Cess, and Total price for each service
             gst_amount = (original_price * gst_rate) / 100
             cess_amount = (original_price * cess_rate) / 100
             total = original_price + gst_amount + cess_amount
 
             # Draw the values in the table
-            c.setFont("Times-Roman", 8)
-            c.drawString(10, y, service_name[:10])  # Truncate service name to fit
-            c.drawString(70, y, f"₹{original_price:.2f}")
-            c.drawString(130, y, f"₹{gst_amount:.2f}")
-            c.drawString(160, y, f"₹{cess_amount:.2f}")
-            c.drawString(180, y, f"₹{total:.2f}")
+            c.setFont("Times-Roman", 10)
+            c.drawString(40, y, service_name[:30])  # Truncate service name to fit
+            c.drawString(180, y, f"₹{original_price:.2f}")
+            c.drawString(300, y, f"₹{gst_amount:.2f}")
+            c.drawString(380, y, f"₹{cess_amount:.2f}")
+            c.drawString(450, y, f"₹{total:.2f}")
 
-            y += 15  # Move to the next row
+            y += 20  # Move to the next row
             total_price += total
 
         # Add total price at the end
-        c.setFont("Times-Bold", 8)
-        c.drawString(130, y + 10, "Total Amount:")
-        c.drawString(180, y + 10, f"₹{total_price:.2f}")
+        c.setFont("Times-Bold", 10)
+        c.drawString(300, y + 20, "Total Amount:")
+        c.drawString(450, y + 20, f"₹{total_price:.2f}")
 
-        # Add authorised signatory
-        c.setFont("Times-Roman", 8)
-        c.drawRightString(180, 270, authorised_signatory)
-        c.drawRightString(180, 280, "Signature")
+        # Add authorised signatory at the bottom
+        c.setFont("Times-Roman", 10)
+        c.drawRightString(550, 800, authorised_signatory)
+        c.drawRightString(550, 820, "Signature")
 
         # Save the PDF
         c.showPage()
@@ -210,6 +207,7 @@ def generate_invoice():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
 
 
 
