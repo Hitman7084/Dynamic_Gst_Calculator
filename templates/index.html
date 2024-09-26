@@ -193,7 +193,7 @@
             {% if gst_amount is not none %}
             <div class="result">
                 <p>Item: <strong>{{ service_name }}</strong></p> <!-- Display the item name -->
-                <p>GST Amount (CGST+IGST): ₹{{ 2*gst_amount }}</p> <!-- Show GST amount with CSGST and IGSt -->
+                <p>GST Amount (CGST+IGST): ₹{{ gst_amount }}</p> <!-- Show GST amount with CSGST and IGSt -->
                 <p>Cess Amount: ₹{{ cess_amount }}</p>
                 <p>Final Price: ₹{{ final_price }}</p>
             </div>

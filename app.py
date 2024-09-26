@@ -65,9 +65,10 @@ def index():
         gst_rate = gst_data[service]['Tax (%)']
         cess_rate = gst_data[service].get('Cess (%)', 0)
 
-        gst_amount = (original_price * gst_rate) / 100
-        cess_amount = (original_price * cess_rate) / 100 if cess_rate else 0
-        final_price = original_price + 2 * gst_amount + cess_amount
+        gst_amount = 2 * (original_price * gst_rate) / 100
+        gst_price = (original_price + gst_amount)
+        cess_amount = (gst_price * cess_rate) / 100 if cess_rate else 0
+        final_price = original_price +  gst_amount + cess_amount
         service_name = service.capitalize()  # Capitalize the service/item name
 
     return render_template('index.html', categories=service_category_map.keys(), services=[], gst_data=gst_data,
