@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import pandas as pd
+import os
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -106,6 +109,71 @@ def save_gst_data():
         return jsonify({'success': False, 'message': str(e)})
 
 
+# Route for generating an invoice
+@app.route('/generate_invoice', methods=['POST'])
+def generate_invoice():
+    try:
+        # Get form data for invoice generation
+        company_name = request.form['company_name']
+        address = request.form['address']
+        city = request.form['city']
+        gst = request.form['gst']
+        date = request.form['date']
+        contact = request.form['contact']
+        customer_name = request.form['customer_name']
+        authorised_signatory = request.form['authorised_signatory']
+
+        # Create an in-memory PDF file
+        buffer = BytesIO()
+        c = canvas.Canvas(buffer, pagesize=(200, 250), bottomup=0)
+
+        # Drawing the invoice using reportlab
+        c.setFillColorRGB(0.8, 0.5, 0.7)
+        c.line(70, 22, 180, 22)
+        c.line(5, 45, 195, 45)
+        c.line(15, 120, 185, 120)
+        c.line(35, 108, 35, 220)
+        c.line(115, 108, 115, 220)
+        c.line(135, 108, 135, 220)
+        c.line(160, 108, 160, 220)
+        c.line(15, 220, 185, 220)
+
+        # Adding company details
+        c.setFont("Times-Bold", 10)
+        c.drawCentredString(125, 20, company_name)
+        c.setFont("Times-Bold", 5)
+        c.drawCentredString(125, 30, address)
+        c.drawCentredString(125, 35, f"{city}, India")
+        c.setFont("Times-Bold", 6)
+        c.drawCentredString(125, 42, f"GST No: {gst}")
+
+        # Invoice details
+        c.setFont("Times-Bold", 8)
+        c.drawCentredString(100, 55, "INVOICE")
+        c.setFont("Times-Bold", 5)
+        c.drawRightString(70, 70, "Invoice No.:")
+        c.drawRightString(100, 70, "XXXXXXX")
+        c.drawRightString(70, 80, "Date:")
+        c.drawRightString(100, 80, date)
+        c.drawRightString(70, 90, "Customer Name:")
+        c.drawRightString(100, 90, customer_name)
+        c.drawRightString(70, 100, "Phone No.:")
+        c.drawRightString(100, 100, contact)
+
+        # Add signature and complete invoice
+        c.drawRightString(180, 228, authorised_signatory)
+        c.drawRightString(180, 235, "Signature")
+
+        c.showPage()
+        c.save()
+
+        buffer.seek(0)
+
+        # Send the generated PDF back to the user for download
+        return send_file(buffer, as_attachment=True, download_name="Invoice.pdf", mimetype='application/pdf')
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 
 # Route to get the current GST data for display in the table

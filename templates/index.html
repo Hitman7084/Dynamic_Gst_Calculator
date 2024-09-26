@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "UTF-8">
-    <meta name="viewport" content = "width=device-width, initial-scale=1.0">
-    <title> GST and Cess Calculator </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST and Cess Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,7 +24,7 @@
         .left, .right {
             width: 48%;
         }
-        h1, h2 {
+        h1, h2, h3 {
             text-align: center;
         }
         label {
@@ -77,7 +77,6 @@
         }
     </style>
     <script>
-        // Function to dynamically update services based on the selected category
         function updateServices(category) {
             fetch(`/get_services/${category}`)
             .then(response => response.json())
@@ -93,13 +92,12 @@
             });
         }
 
-        // Load the GST data ----> table
         function loadTableData() {
             fetch('/get_gst_data')
             .then(response => response.json())
             .then(data => {
                 const table = document.getElementById('gstTableBody');
-                table.innerHTML = '';  // Clear existing data
+                table.innerHTML = '';
 
                 data.forEach((row, index) => {
                     const newRow = document.createElement('tr');
@@ -114,7 +112,6 @@
             });
         }
 
-        // Function to save the updated table data
         function saveTableData() {
             const table = document.getElementById('gstTableBody');
             const rows = table.querySelectorAll('tr');
@@ -146,7 +143,6 @@
             });
         }
 
-        // Add a new row to the table
         function addNewRow() {
             const table = document.getElementById('gstTableBody');
             const newRow = document.createElement('tr');
@@ -160,7 +156,7 @@
         }
 
         window.onload = function() {
-            loadTableData();  // Load the table data when the page is loaded
+            loadTableData();
         }
     </script>
 </head>
@@ -192,8 +188,8 @@
 
             {% if gst_amount is not none %}
             <div class="result">
-                <p>Item: <strong>{{ service_name }}</strong></p> <!-- Display the item name -->
-                <p>GST Amount (CGST+IGST): ₹{{ gst_amount }}</p> <!-- Show GST amount with CSGST and IGSt -->
+                <p>Item: <strong>{{ service_name }}</strong></p>
+                <p>GST Amount (CGST+IGST): ₹{{ gst_amount }}</p>
                 <p>Cess Amount: ₹{{ cess_amount }}</p>
                 <p>Final Price: ₹{{ final_price }}</p>
             </div>
@@ -217,6 +213,40 @@
 
             <button onclick="addNewRow()">Add New Row</button>
             <button onclick="saveTableData()">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Invoice Generator Section -->
+    <div class="container">
+        <div class="left">
+            <h3>Generate E-Bill Invoice</h3>
+            <form action="/generate_invoice" method="POST">
+                <label for="company_name">Company Name:</label>
+                <input type="text" id="company_name" name="company_name" required>
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+
+                <label for="gst">GST Number:</label>
+                <input type="text" id="gst" name="gst" required>
+
+                <label for="date">Date:</label>
+                <input type="text" id="date" name="date" required>
+
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" name="contact" required>
+
+                <label for="customer_name">Customer Name:</label>
+                <input type="text" id="customer_name" name="customer_name" required>
+
+                <label for="authorised_signatory">Authorised Signatory:</label>
+                <input type="text" id="authorised_signatory" name="authorised_signatory" required>
+
+                <button type="submit">Generate Invoice</button>
+            </form>
         </div>
     </div>
 </body>
