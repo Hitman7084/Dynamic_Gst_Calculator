@@ -86,12 +86,27 @@ def get_services(category):
 @app.route('/save_gst_data', methods=['POST'])
 def save_gst_data():
     try:
-        updated_data = request.json
-        df = pd.DataFrame(updated_data)
-        df.to_csv('goods_gst.csv', index=False)
-        return jsonify({'success': True, 'message': 'Data saved successfully!'})
+        # Get the new row data from the POST request
+        new_data = request.json
+        
+        # Load the existing CSV data
+        df_existing = pd.read_csv('goods_gst.csv')
+
+        # Convert the new data to a DataFrame
+        df_new = pd.DataFrame(new_data)
+
+        # Append the new row(s) to the existing DataFrame
+        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+
+        # Save the updated DataFrame back to the CSV
+        df_combined.to_csv('goods_gst.csv', index=False)
+
+        return jsonify({'success': True, 'message': 'New data added successfully!'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
+
+
 
 # Route to get the current GST data for display in the table
 @app.route('/get_gst_data')
