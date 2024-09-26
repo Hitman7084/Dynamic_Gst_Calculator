@@ -123,47 +123,83 @@ def generate_invoice():
         customer_name = request.form['customer_name']
         authorised_signatory = request.form['authorised_signatory']
 
+        # Simulate a list of items to include in the invoice (you can replace this with actual data from your form)
+        items = [
+            {
+                'service_name': 'Service 1',
+                'original_price': 1000.0,
+                'gst_rate': 18,   # 18% GST
+                'cess_rate': 0    # 0% Cess
+            },
+            {
+                'service_name': 'Service 2',
+                'original_price': 500.0,
+                'gst_rate': 12,   # 12% GST
+                'cess_rate': 5    # 5% Cess
+            }
+        ]
+
         # Create an in-memory PDF file
         buffer = BytesIO()
-        c = canvas.Canvas(buffer, pagesize=(200, 250), bottomup=0)
+        c = canvas.Canvas(buffer, pagesize=(200, 300), bottomup=0)
 
-        # Drawing the invoice using reportlab
-        c.setFillColorRGB(0.8, 0.5, 0.7)
-        c.line(70, 22, 180, 22)
-        c.line(5, 45, 195, 45)
-        c.line(15, 120, 185, 120)
-        c.line(35, 108, 35, 220)
-        c.line(115, 108, 115, 220)
-        c.line(135, 108, 135, 220)
-        c.line(160, 108, 160, 220)
-        c.line(15, 220, 185, 220)
-
-        # Adding company details
+        # Company Information
         c.setFont("Times-Bold", 10)
-        c.drawCentredString(125, 20, company_name)
-        c.setFont("Times-Bold", 5)
-        c.drawCentredString(125, 30, address)
-        c.drawCentredString(125, 35, f"{city}, India")
-        c.setFont("Times-Bold", 6)
-        c.drawCentredString(125, 42, f"GST No: {gst}")
+        c.drawCentredString(100, 20, company_name)
+        c.setFont("Times-Roman", 8)
+        c.drawCentredString(100, 35, f"{address}, {city}")
+        c.drawCentredString(100, 50, f"GST No: {gst}")
+        c.drawCentredString(100, 60, f"Date: {date}")
+        c.drawCentredString(100, 70, f"Customer: {customer_name}")
+        c.drawCentredString(100, 80, f"Contact: {contact}")
 
-        # Invoice details
+        # Invoice Table Header
         c.setFont("Times-Bold", 8)
-        c.drawCentredString(100, 55, "INVOICE")
-        c.setFont("Times-Bold", 5)
-        c.drawRightString(70, 70, "Invoice No.:")
-        c.drawRightString(100, 70, "XXXXXXX")
-        c.drawRightString(70, 80, "Date:")
-        c.drawRightString(100, 80, date)
-        c.drawRightString(70, 90, "Customer Name:")
-        c.drawRightString(100, 90, customer_name)
-        c.drawRightString(70, 100, "Phone No.:")
-        c.drawRightString(100, 100, contact)
+        c.drawString(10, 100, "Service")
+        c.drawString(70, 100, "Original Price")
+        c.drawString(130, 100, "GST")
+        c.drawString(160, 100, "Cess")
+        c.drawString(180, 100, "Total")
 
-        # Add signature and complete invoice
-        c.drawRightString(180, 228, authorised_signatory)
-        c.drawRightString(180, 235, "Signature")
+        # Draw horizontal line under headers
+        c.line(5, 105, 195, 105)
 
+        # Loop through the items and print each row in the PDF
+        y = 120
+        total_price = 0
+        for item in items:
+            service_name = item['service_name']
+            original_price = item['original_price']
+            gst_rate = item['gst_rate']
+            cess_rate = item['cess_rate']
+
+            # Calculate GST, Cess, and Total price for each item
+            gst_amount = (original_price * gst_rate) / 100
+            cess_amount = (original_price * cess_rate) / 100
+            total = original_price + gst_amount + cess_amount
+
+            # Draw the values in the table
+            c.setFont("Times-Roman", 8)
+            c.drawString(10, y, service_name[:10])  # Truncate service name to fit
+            c.drawString(70, y, f"₹{original_price:.2f}")
+            c.drawString(130, y, f"₹{gst_amount:.2f}")
+            c.drawString(160, y, f"₹{cess_amount:.2f}")
+            c.drawString(180, y, f"₹{total:.2f}")
+
+            y += 15  # Move to the next row
+            total_price += total
+
+        # Add total price at the end
+        c.setFont("Times-Bold", 8)
+        c.drawString(130, y + 10, "Total Amount:")
+        c.drawString(180, y + 10, f"₹{total_price:.2f}")
+
+        # Add authorised signatory
+        c.setFont("Times-Roman", 8)
+        c.drawRightString(180, 270, authorised_signatory)
+        c.drawRightString(180, 280, "Signature")
+
+        # Save the PDF
         c.showPage()
         c.save()
 
@@ -174,6 +210,7 @@ def generate_invoice():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
 
 
 # Route to get the current GST data for display in the table
