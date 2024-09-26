@@ -1,77 +1,77 @@
 Service Category,Service Name,GST Rate,Cess Rate
-Food,Milk,0,
-Food,butter,12,
-Food,Curd,0,
-Food,Lassi,0,
-Food,Eggs,0,
-Food,Fresh Vegetables,0,
-Unbranded, atta,0,
-Unbranded, maida,0,
-Unbranded, Paneer,0,
-Unbranded, Gur,0,
-Unbranded, Besan,0,
-Unbranded, Natural Honey,0,
-Unbranded, Coconut Water,12,
-Educational Services, high school fee,18,
-Educational Services, intermediate fee,18,
-Educational Services, kindergarden fee,0,
-Health Services, essential medicines,5,
-Health Services, Life saving drugs,5,
-Health Services, homeopathic medicine,12,
-Health Services, allopathic medicines,12,
-Health Services, Aryurvedic medicine,12,
-Health Services, veterinary medicine,12,
-Salt, Normal Salt,0,
-Salt, Black salt,5,
-Salt, RocK salt,5,
-Cleaning tools, Phool Bhari Jhadoo,0,
-Cleaning tools, Mop,18,
-Cleaning tools, Sponges,18,
-Cleaning tools, Vacuum cleaner,18,
-Processed dry fruit, Raisin,5,
-Processed dry fruit, Almonds,5,
-Raw dry fruit, Raisin,0,
-Raw dry fruit, Almonds,0,
-Electronics, Computers,12,
-Electronics, Diodes,18,
-Electronics, Transistors,18,
-Electrical, Wires and Cable,18,
-Electrical, Plugs,18,
-Electrical, Switches,18,
-Natural Fabric, knitted/woven Cotton,5,
-Natural Fabric, knitted/woven Silk,5,
-Natural Fabric, knitted/woven Wool,5,
-Man-Made Fabric, knitteed/woven Nylon,5,
-Man-Made Fabric, knitted/woven Polyester,5,
-Proceessed Fabric, dyed/printed Cotton,18,
-Proceessed Fabric, dyed/printed Nylon,18,
-Proceessed Fabric, dyed/printed Polyester,18,
-Proceessed Fabric, dyed/printed Silk,18,
-Proceessed Fabric, dyed/printed Wool,18,
-Drinks, Coffee,5,
-Drinks, Tea,5,
-Drinks, Fruit Juice,12,
-Drinks, Carbonated Beverages,28,
-Insurance services, LIC,18,
-Insurance Services, General insurance ,18,
-Financial services, Mutual Fund services,18,
-Financial services, Brokerage charges ,18,
-Financial services, Foreign currency conversion services,18,
-Financial services, Leasing and hire purchase services,18,
-Cosmetics, Kajal,18,
-Cosmetics, Foundation,18,
-Cosmetics, Lipstick,18,
-Cosmetics, creams,18,
-Cosmetics, lotions,18,
-Cosmetics, Perfumes/Deodorants,18,
-Cosmetics, shampoos,18,
-Cosmetics, conditioners,18,
-Cosmetics, Nail polish,18,
-Cosmetics, toothpaste,18,
+Food,Milk,0,0
+Food,butter,12,0
+Food,Curd,0,0
+Food,Lassi,0,0
+Food,Eggs,0,0
+Food,Fresh Vegetables,0,0
+Unbranded, atta,0,0
+Unbranded, maida,0,0
+Unbranded, Paneer,0,0
+Unbranded, Gur,0,0
+Unbranded, Besan,0,0
+Unbranded, Natural Honey,0,0
+Unbranded, Coconut Water,12,0
+Educational Services, high school fee,18,0
+Educational Services, intermediate fee,18,0
+Educational Services, kindergarden fee,0,0
+Health Services, essential medicines,5,0
+Health Services, Life saving drugs,5,0
+Health Services, homeopathic medicine,12,0
+Health Services, allopathic medicines,12,0
+Health Services, Aryurvedic medicine,12,0
+Health Services, veterinary medicine,12,0
+Salt, Normal Salt,0,0
+Salt, Black salt,5,0
+Salt, RocK salt,5,0
+Cleaning tools, Phool Bhari Jhadoo,0,0
+Cleaning tools, Mop,18,0
+Cleaning tools, Sponges,18,0
+Cleaning tools, Vacuum cleaner,18,0
+Processed dry fruit, Raisin,5,0
+Processed dry fruit, Almonds,5,0
+Raw dry fruit, Raisin,0,0
+Raw dry fruit, Almonds,0,0
+Electronics, Computers,12,0
+Electronics, Diodes,18,0
+Electronics, Transistors,18,0
+Electrical, Wires and Cable,18,0
+Electrical, Plugs,18,0
+Electrical, Switches,18,0
+Natural Fabric, knitted/woven Cotton,5,0
+Natural Fabric, knitted/woven Silk,5,0
+Natural Fabric, knitted/woven Wool,5,0
+Man-Made Fabric, knitteed/woven Nylon,5,0
+Man-Made Fabric, knitted/woven Polyester,5,0
+Proceessed Fabric, dyed/printed Cotton,18,0
+Proceessed Fabric, dyed/printed Nylon,18,0
+Proceessed Fabric, dyed/printed Polyester,18,0
+Proceessed Fabric, dyed/printed Silk,18,0
+Proceessed Fabric, dyed/printed Wool,18,0
+Drinks, Coffee,5,0
+Drinks, Tea,5,0
+Drinks, Fruit Juice,12,0
+Drinks, Carbonated Beverages,28,0
+Insurance services, LIC,18,0
+Insurance Services, General insurance ,18,0
+Financial services, Mutual Fund services,18,0
+Financial services, Brokerage charges ,18,0
+Financial services, Foreign currency conversion services,18,0
+Financial services, Leasing and hire purchase services,18,0
+Cosmetics, Kajal,18,0
+Cosmetics, Foundation,18,0
+Cosmetics, Lipstick,18,0
+Cosmetics, creams,18,0
+Cosmetics, lotions,18,0
+Cosmetics, Perfumes/Deodorants,18,0
+Cosmetics, shampoos,18,0
+Cosmetics, conditioners,18,0
+Cosmetics, Nail polish,18,0
+Cosmetics, toothpaste,18,0
 Cosmetics, mouthwash,18, 
-Cosmetics, Sunscreen,18,
-Cosmetics, soaps,18,
-Cosmetics, body wash,18,
-Vehicle,Electric cars,5,
+Cosmetics, Sunscreen,18,0
+Cosmetics, soaps,18,0
+Cosmetics, body wash,18,0
+Vehicle,Electric cars,5,0
 Vehicle,Hybrid cars,28,15
-Vehicle,Electric bikes,5,
+
