@@ -171,8 +171,8 @@ def generate_invoice():
 
             # Calculate GST, Cess, and Total price for each service
             gst_amount = 2*(original_price * gst_rate) / 100
-            gst_rate = gst_amount + original_price
-            cess_amount = (gst_rate * cess_rate) / 100
+            total_gst_rate = gst_amount + original_price
+            cess_amount = (total_gst_rate * cess_rate) / 100
             total = original_price + gst_amount + cess_amount
 
             

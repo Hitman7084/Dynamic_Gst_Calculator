@@ -297,19 +297,6 @@
                 <label for="customer_name">Customer Name:</label>
                 <input type="text" id="customer_name" name="customer_name" required>
 
-                <h4>Selected Services:</h4>
-                <div id="selectedServices">
-                    <label for="services">Services:</label>
-                    <select id="services" name="services" multiple required>
-                        {% for service in services %}
-                        <option value="{{ service }}">{{ service }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <label for="original_prices">Original Prices:</label>
-                    <input type="text" id="original_prices" name="original_prices" required>
-                </div>
-
                 <button type="submit">Generate Invoice</button>
             </form>
         </div>
