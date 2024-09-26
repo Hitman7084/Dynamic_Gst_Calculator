@@ -38,7 +38,7 @@
 
         .right tbody {
             display: block;
-            max-height: 300px; /* Limit the height for scrolling */
+            max-height: 300px;
             overflow-y: auto;
             width: 100%;
         }
@@ -194,23 +194,23 @@
                 {
                     serviceName: document.getElementById('service').value,
                     originalPrice: document.getElementById('original_price').value,
-                    gstRate: 18, // Set or fetch GST rate dynamically if necessary
-                    cessRate: 0   // Similarly, set or fetch the cess rate
+                    gstRate: 18, 
+                    cessRate: 0   
                 }
             ];
 
             fetch('/generate_invoice', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Explicitly set content type
+                    'Content-Type': 'application/json', 
                 },
-                body: JSON.stringify({ items: items }) // Ensure the body is stringified JSON
+                body: JSON.stringify({ items: items }) // shi hai Json stringified JSON
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert('Invoice generated successfully!');
-                    // You can handle downloading the invoice or redirect here if needed
+                    
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -224,7 +224,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Left Side: GST Calculator -->
         <div class="left">
             <h1>GST and Cess Calculator</h1>
 
@@ -258,7 +257,7 @@
             {% endif %}
         </div>
 
-        <!-- Right Side: GST Table Editing -->
+
         <div class="right">
             <h2>Edit GST Data</h2>
             <table>
@@ -278,7 +277,7 @@
         </div>
     </div>
 
-    <!-- Invoice Generator Section -->
+    
     <div class="container">
         <div class="left">
             <h3>Generate E-Bill Invoice</h3>

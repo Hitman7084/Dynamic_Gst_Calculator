@@ -48,7 +48,7 @@ gst_data, service_category_map = load_gst_data()
 @app.route('/', methods=['GET', 'POST'])
 def index():
     gst_amount = cess_amount = final_price = None
-    service_name = None  # Add a variable to hold the item/service name
+    service_name = None  
 
     if request.method == 'POST':
         original_price = request.form.get('original_price')
@@ -89,19 +89,19 @@ def get_services(category):
 @app.route('/save_gst_data', methods=['POST'])
 def save_gst_data():
     try:
-        # Get the new row data from the POST request
+        
         new_data = request.json
         
-        # Load the existing CSV data
+        
         df_existing = pd.read_csv('goods_gst.csv')
 
-        # Convert the new data to a DataFrame
+        
         df_new = pd.DataFrame(new_data)
 
-        # Append the new row(s) to the existing DataFrame
+        
         df_combined = pd.concat([df_existing, df_new], ignore_index=True)
 
-        # Save the updated DataFrame back to the CSV
+        
         df_combined.to_csv('goods_gst.csv', index=False)
 
         return jsonify({'success': True, 'message': 'New data added successfully!'})
@@ -113,7 +113,7 @@ def save_gst_data():
 @app.route('/generate_invoice', methods=['POST'])
 def generate_invoice():
     try:
-        # Get form data for invoice generation
+        
         company_name = request.form['company_name']
         address = request.form['address']
         city = request.form['city']
@@ -122,20 +122,20 @@ def generate_invoice():
         contact = request.form['contact']
         customer_name = request.form['customer_name']
 
-        # Get services from the form (assuming they are passed as a list)
+    
         selected_services = request.form.getlist('services')  # Get multiple services
         original_prices = request.form.getlist('original_prices')  # Get corresponding prices
 
-        # Convert prices to float
+        
         original_prices = [float(price) for price in original_prices]
 
         # Create an in-memory PDF file
         buffer = BytesIO()
 
-        # Increase the page size to A4 (595.27, 841.89)
+        
         c = canvas.Canvas(buffer, pagesize=(595, 842), bottomup=0)
 
-        # Company Information
+        
         c.setFont("Times-Bold", 14)
         c.drawCentredString(300, 40, company_name)  # Centered based on the new width
         c.setFont("Times-Roman", 12)
@@ -145,7 +145,7 @@ def generate_invoice():
         c.drawCentredString(300, 120, f"Customer: {customer_name}")
         c.drawCentredString(300, 140, f"Contact: {contact}")
 
-        # Invoice Table Header
+
         c.setFont("Times-Bold", 10)
         c.drawString(40, 160, "Service")
         c.drawString(180, 160, "Original Price")
@@ -153,16 +153,16 @@ def generate_invoice():
         c.drawString(380, 160, "Cess")
         c.drawString(450, 160, "Total")
 
-        # Draw horizontal line under headers
+        
         c.line(40, 165, 550, 165)
 
-        # Loop through the selected services and generate rows
+        
         y = 180
         total_price = 0
         for service, original_price in zip(selected_services, original_prices):
             service_name = service.capitalize()
             
-            # Fetch GST and Cess details from gst_data based on the service name
+
             if service in gst_data:
                 gst_rate = gst_data[service]['Tax (%)']
                 cess_rate = gst_data[service].get('Cess (%)', 0)
@@ -175,33 +175,33 @@ def generate_invoice():
             cess_amount = (gst_rate * cess_rate) / 100
             total = original_price + gst_amount + cess_amount
 
-            # Draw the values in the table
+            
             c.setFont("Times-Roman", 10)
-            c.drawString(40, y, service_name[:30])  # Truncate service name to fit
+            c.drawString(40, y, service_name[:30])  
             c.drawString(180, y, f"₹{original_price:.2f}")
             c.drawString(300, y, f"₹{gst_amount:.2f}")
             c.drawString(380, y, f"₹{cess_amount:.2f}")
             c.drawString(450, y, f"₹{total:.2f}")
 
-            y += 20  # Move to the next row
+            y += 20  
             total_price += total
 
-        # Add total price at the end
+        
         c.setFont("Times-Bold", 10)
         c.drawString(300, y + 20, "Total Amount:")
         c.drawString(450, y + 20, f"₹{total_price:.2f}")
 
-        # Add authorised signatory at the bottom
+        
         c.setFont("Times-Roman", 10)
         c.drawRightString(550, 820, "Signature")
 
-        # Save the PDF
+
         c.showPage()
         c.save()
 
         buffer.seek(0)
 
-        # Send the generated PDF back to the user for download
+
         return send_file(buffer, as_attachment=True, download_name="Invoice.pdf", mimetype='application/pdf')
 
     except Exception as e:
