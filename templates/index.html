@@ -186,6 +186,38 @@
         window.onload = function() {
             loadTableData();
         }
+
+        function generateInvoice() {
+            const items = [
+                {
+                    serviceName: document.getElementById('service').value,
+                    originalPrice: document.getElementById('original_price').value,
+                    gstRate: 18, // Set or fetch GST rate dynamically if necessary
+                    cessRate: 0   // Similarly, set or fetch the cess rate
+                }
+            ];
+
+            fetch('/generate_invoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Explicitly set content type
+                },
+                body: JSON.stringify({ items: items }) // Ensure the body is stringified JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Invoice generated successfully!');
+                    // You can handle downloading the invoice or redirect here if needed
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -273,7 +305,7 @@
                 <label for="authorised_signatory">Authorised Signatory:</label>
                 <input type="text" id="authorised_signatory" name="authorised_signatory" required>
 
-                <button type="submit">Generate Invoice</button>
+                <button onclick="generateInvoice()">Generate Invoice</button>
             </form>
         </div>
     </div>
