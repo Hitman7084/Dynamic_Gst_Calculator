@@ -189,19 +189,10 @@
             loadTableData();
         }
 
-        function generateInvoice() {
-            const formData = new FormData();
-            formData.append('company_name', document.getElementById('company_name').value);
-            formData.append('address', document.getElementById('address').value);
-            formData.append('city', document.getElementById('city').value);
-            formData.append('gst', document.getElementById('gst').value);
-            formData.append('date', document.getElementById('date').value);
-            formData.append('contact', document.getElementById('contact').value);
-            formData.append('customer_name', document.getElementById('customer_name').value);
-    
-    // Append services and prices
-            formData.append('services', document.getElementById('service').value);
-            formData.append('original_prices', document.getElementById('original_price').value);
+        function generateInvoice(event) {
+            event.preventDefault();  // Prevent form submission
+
+            const formData = new FormData(event.target); // Get form data
 
             fetch('/generate_invoice', {
                 method: 'POST',
@@ -284,7 +275,7 @@
     <div class="container">
         <div class="left">
             <h3>Generate E-Bill Invoice</h3>
-            <form action="/generate_invoice" method="POST">
+            <form onsubmit="generateInvoice(event)">
                 <label for="company_name">Company Name:</label>
                 <input type="text" id="company_name" name="company_name" required>
 
@@ -294,19 +285,32 @@
                 <label for="city">City:</label>
                 <input type="text" id="city" name="city" required>
 
-                <label for="gst">GST Number:</label>
+                <label for="gst">GST No:</label>
                 <input type="text" id="gst" name="gst" required>
 
                 <label for="date">Date:</label>
-                <input type="text" id="date" name="date" required>
+                <input type="date" id="date" name="date" required>
 
-                <label for="contact">Contact:</label>
+                <label for="contact">Contact No:</label>
                 <input type="text" id="contact" name="contact" required>
 
                 <label for="customer_name">Customer Name:</label>
                 <input type="text" id="customer_name" name="customer_name" required>
 
-                <button onclick="generateInvoice()">Generate Invoice</button>
+                <h4>Selected Services:</h4>
+                <div id="selectedServices">
+                    <label for="services">Services:</label>
+                    <select id="services" name="services" multiple required>
+                        {% for service in services %}
+                        <option value="{{ service }}">{{ service }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="original_prices">Original Prices:</label>
+                    <input type="text" id="original_prices" name="original_prices" required>
+                </div>
+
+                <button type="submit">Generate Invoice</button>
             </form>
         </div>
     </div>
