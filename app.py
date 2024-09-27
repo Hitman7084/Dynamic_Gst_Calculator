@@ -21,12 +21,12 @@ def load_gst_data():
             try:
                 gst_rate = float(row['GST Rate'])
             except ValueError:
-                gst_rate = 0  # Default to 0% GST if invalid
+                gst_rate = 0  # Default to 0% GST agr galat
 
             try:
                 cess_rate = float(row['Cess Rate']) if pd.notna(row['Cess Rate']) else 0
             except ValueError:
-                cess_rate = 0  # Default to 0% cess if invalid
+                cess_rate = 0  # Default to 0% cess agr galat
 
             gst_data[item] = {
                 'Tax (%)': gst_rate,
